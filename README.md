@@ -87,6 +87,7 @@ curl -sSL https://raw.githubusercontent.com/chacesclaw/cloudflare-tunnel-deploy/
 | 文档 | 说明 |
 |------|------|
 | [📘 一键部署教程](./docs/deploy-guide.md) | 从零到一的详细部署步骤 |
+| [🏷️ 几块钱买 .xyz 域名（Namesilo 优惠码）](./docs/buy-cheap-xyz-domain.md) | 首年约 3 元，长期持有 10 年约 360 元 |
 | [🌐 域名托管到 Cloudflare（完整图解）](./docs/domain-setup-cloudflare.md) | 第一步：把域名交给 Cloudflare 管理，手把手教学 |
 | [🔑 Global API Key 获取指南（避免搞错）](./docs/global-api-key-guide.md) | 弄清 API Key 和 API Token 的区别，一次拿对 |
 | [💻 VMware 搭建 Linux 虚拟机（Win/Mac）](./docs/vmware-vm-setup.md) | VMware 已免费！从安装到 Ubuntu 系统搭建详细教程 |
@@ -105,6 +106,7 @@ cloudflare-tunnel-deploy/
 │   ├── nginx-site.conf           # Nginx 站点配置模板
 │   └── cloudflared-config.yml    # Cloudflare Tunnel 配置模板
 ├── docs/                         # 详细文档
+│   ├── buy-cheap-xyz-domain.md          # 🏷️ 几块钱买.xyz域名
 │   ├── domain-setup-cloudflare.md    # 🌐 域名托管到Cloudflare（完整图解）
 │   ├── global-api-key-guide.md       # 🔑 Global API Key获取指南（避免搞错）
 │   ├── vmware-vm-setup.md            # 💻 VMware搭建Linux虚拟机（Win/Mac）

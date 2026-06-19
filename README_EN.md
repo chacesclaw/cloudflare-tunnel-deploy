@@ -62,6 +62,10 @@ The script will prompt you for:
 | Document | Description |
 |----------|-------------|
 | [📘 Deploy Guide](./docs/deploy-guide.md) | Step-by-step deployment instructions |
+| [🏷️ Buy Cheap .xyz Domain (Namesilo)]($/docs/buy-cheap-xyz-domain.md) | First year ~$0.39 with coupon, 10 years ~$50 |
+| [🌐 Add Domain to Cloudflare](./docs/domain-setup-cloudflare.md) | Step-by-step domain setup on Cloudflare |
+| [🔑 Global API Key Guide](./docs/global-api-key-guide.md) | How to get the right API credential |
+| [💻 VMware VM Setup (Win/Mac)](./docs/vmware-vm-setup.md) | Create a Linux VM — free VMware, step by step |
 | [📗 Free Plan Limits](./docs/cloudflare-free-plan-limits.md) | Bandwidth, file size, fair use explained |
 | [📙 Proxy Strategy](./docs/proxy-strategy.md) | How to download behind China's firewall |
 | [📕 Troubleshooting](./docs/troubleshooting.md) | Common issues and solutions |
