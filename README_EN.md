@@ -102,5 +102,9 @@ MIT © [chacesclaw](https://github.com/chacesclaw)
 ---
 
 <div align="center">
+  <sub>Built with ❤️ by <a href="https://github.com/chacesclaw">chacesclaw</a></sub>
+  <br>
+  <sub>📧 Contact: chacesclaw [at] gmail [dot] com</sub>
+  <br>
   <sub>Not affiliated with Cloudflare, Inc. Cloudflare® is a registered trademark of Cloudflare, Inc.</sub>
 </div>

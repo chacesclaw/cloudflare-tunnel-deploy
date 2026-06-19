@@ -87,6 +87,9 @@ curl -sSL https://raw.githubusercontent.com/chacesclaw/cloudflare-tunnel-deploy/
 | 文档 | 说明 |
 |------|------|
 | [📘 一键部署教程](./docs/deploy-guide.md) | 从零到一的详细部署步骤 |
+| [🌐 域名托管到 Cloudflare（完整图解）](./docs/domain-setup-cloudflare.md) | 第一步：把域名交给 Cloudflare 管理，手把手教学 |
+| [🔑 Global API Key 获取指南（避免搞错）](./docs/global-api-key-guide.md) | 弄清 API Key 和 API Token 的区别，一次拿对 |
+| [💻 VMware 搭建 Linux 虚拟机（Win/Mac）](./docs/vmware-vm-setup.md) | VMware 已免费！从安装到 Ubuntu 系统搭建详细教程 |
 | [📗 Cloudflare 免费版限制说明](./docs/cloudflare-free-plan-limits.md) | 流量、带宽、文件大小等限制详解 |
 | [📙 国内网络代理策略](./docs/proxy-strategy.md) | GitHub 被墙时的下载方案 |
 | [📕 常见问题排查](./docs/troubleshooting.md) | 部署中遇到问题的解决方法 |
@@ -102,7 +105,10 @@ cloudflare-tunnel-deploy/
 │   ├── nginx-site.conf           # Nginx 站点配置模板
 │   └── cloudflared-config.yml    # Cloudflare Tunnel 配置模板
 ├── docs/                         # 详细文档
-│   ├── deploy-guide.md           # 部署指南
+│   ├── domain-setup-cloudflare.md    # 🌐 域名托管到Cloudflare（完整图解）
+│   ├── global-api-key-guide.md       # 🔑 Global API Key获取指南（避免搞错）
+│   ├── vmware-vm-setup.md            # 💻 VMware搭建Linux虚拟机（Win/Mac）
+│   ├── deploy-guide.md               # 📘 一键部署教程
 │   ├── cloudflare-free-plan-limits.md
 │   ├── proxy-strategy.md
 │   ├── troubleshooting.md
@@ -171,6 +177,8 @@ cloudflare-tunnel-deploy/
 
 <div align="center">
   <sub>Built with ❤️ by <a href="https://github.com/chacesclaw">chacesclaw</a></sub>
+  <br>
+  <sub>📧 联系作者：chacesclaw [at] gmail [dot] com（请手动替换为 @ 和 .）</sub>
   <br>
   <sub>Not affiliated with Cloudflare, Inc. Cloudflare® is a registered trademark of Cloudflare, Inc.</sub>
 </div>
