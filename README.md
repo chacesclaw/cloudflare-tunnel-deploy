@@ -15,19 +15,63 @@
 
 </div>
 
-## 📸 效果预览
+## 🗺️ 业务流程一览
 
 ```
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│  用户浏览器  │────▶│  Cloudflare  │────▶│  你的虚拟机  │
-│  HTTPS访问   │     │  CDN + 隧道   │     │  Nginx服务   │
-└─────────────┘     └──────────────┘     └─────────────┘
-                           │
-                    ┌──────┴──────┐
-                    │  无需公网IP  │
-                    │  SSL自动证书  │
-                    │  DDoS防护    │
-                    └─────────────┘
+                    ┌─────────────────────────────────────┐
+                    │        你开始之前需要准备              │
+                    │                                      │
+                    │  ① 一台电脑（随便什么电脑都行）         │
+                    │     ├─ 有 Linux 系统 → 直接开始       │
+                    │     └─ Windows/Mac → 用 VMware 装    │
+                    │        Linux 虚拟机（免费，有教程）     │
+                    │                                      │
+                    │  ② 一个域名                            │
+                    │     ├─ 已有域名 → 直接使用              │
+                    │     └─ 没有域名 → 花几十块钱买          │
+                    │        六位数字 .xyz（10年≈43~70元）    │
+                    │                                      │
+                    │  ③ 一个 Cloudflare 账号（免费注册）     │
+                    └──────────────────┬──────────────────┘
+                                       │
+                                       ▼
+               ┌───────────────────────────────────────┐
+               │        把以下信息给 AI 分身处理           │
+               │   （Claude / Hermes Agent 等）           │
+               │                                         │
+               │   📧 Cloudflare 邮箱                     │
+               │   🔑 Cloudflare Global API Key           │
+               │   🌐 你的域名                            │
+               └──────────────────┬──────────────────────┘
+                                  │
+                                  ▼
+            ┌──────────────────────────────────────────────────┐
+            │        AI 分身会自动完成以下所有工作                │
+            │                                                  │
+            │   ┌──────────┐   ┌──────────┐   ┌─────────────┐  │
+            │   │ ① 域名   │   │ ② 创建   │   │ ③ 安装      │  │
+            │   │ 绑定到   │──▶│ Cloudflare│──▶│ Nginx       │  │
+            │   │Cloudflare│   │ Tunnel   │   │ Web服务器    │  │
+            │   └──────────┘   └──────────┘   └─────────────┘  │
+            │        │              │              │            │
+            │        ▼              ▼              ▼            │
+            │   ┌──────────┐   ┌──────────┐   ┌─────────────┐  │
+            │   │ ④ 配置   │   │ ⑤ 注册   │   │ ⑥ 开启      │  │
+            │   │ DNS记录  │──▶│ 系统服务  │──▶│ Always Use  │  │
+            │   │ CNAME    │   │ 开机自启  │   │ HTTPS       │  │
+            │   └──────────┘   └──────────┘   └─────────────┘  │
+            │                                                  │
+            └──────────────────┬───────────────────────────────┘
+                               │
+                               ▼
+            ┌─────────────────────────────────────────────┐
+            │              ✅ 完成！                        │
+            │                                              │
+            │   你现在可以：                                 │
+            │   • 浏览器访问 https://你的域名 → 看到网站     │
+            │   • 上传网页到 /var/www/html/ → 即刻生效      │
+            │   • 添加子路径 → 参考 Nginx 配置指南          │
+            └─────────────────────────────────────────────┘
 ```
 
 ## 🎯 这个项目解决什么问题？
@@ -53,35 +97,45 @@
 
 ## 🚀 快速开始
 
-### 前置条件
+### 🔰 第一步：检查自己处于哪个阶段
 
-- ✅ **Cloudflare 托管的域名**（在 Cloudflare 后台添加了域名）
-- ✅ **Cloudflare Global API Key**（在 [API Tokens](https://dash.cloudflare.com/profile/api-tokens) 获取）
-- ✅ **一台 Linux 机器**（Ubuntu/Debian 推荐，其他发行版需调整命令）
-- ✅ **出站网络**（虚拟机只需能访问外网，无需公网 IP）
+对照上方的流程图，确认你准备好了什么、还缺什么：
 
-### 第一步：配置信息
+| 当前状态 | 下一步 |
+|---------|--------|
+| 🖥️ **没 Linux 环境** | 用 VMware 装一个 → [VMware 搭建 Linux 虚拟机](./docs/vmware-vm-setup.md) |
+| 🌐 **没有域名** | 花几十块买个 10 年 .xyz → [几块钱买 .xyz 域名](./docs/buy-cheap-xyz-domain.md) |
+| ☁️ **没有 Cloudflare 账号** | 去 [cloudflare.com](https://cloudflare.com) 免费注册 |
+| 🔑 **有账号但没有 API Key** | 获取 Global API Key → [API Key 获取指南](./docs/global-api-key-guide.md) |
 
-```bash
-# 用真实信息替换以下变量
-export CF_EMAIL="your@email.com"
-export CF_KEY="cfk_your_global_api_key_here"
-export CF_DOMAIN="yourdomain.com"
-export CF_SUBDOMAIN="www"   # 最终域名: www.yourdomain.com
+### 🔰 第二步：把以下信息交给 AI 分身
+
+当你准备好了，把你的 AI 分身（Claude、Hermes Agent 等）叫出来，给它三个信息：
+
+```text
+Cloudflare 邮箱: your@email.com
+Global API Key: cfk_your_global_api_key_here
+域名: yourdomain.com
+子域名: www   ← 你想要什么子域名，最终网址就是 www.yourdomain.com
 ```
 
-### 第二步：一键部署
+### 🔰 第三步：AI 分身自动完成全部配置
 
-```bash
-curl -sSL https://raw.githubusercontent.com/chacesclaw/cloudflare-tunnel-deploy/main/src/deploy.sh | bash
-```
+AI 接收到你的信息后，会自动完成：
 
-> ⏱ 整个过程约 3-5 分钟，取决于网络速度。
+- ✅ 域名绑定到 Cloudflare
+- ✅ 创建 Cloudflare Tunnel
+- ✅ 安装和配置 Nginx
+- ✅ 配置 DNS 记录（CNAME → 隧道）
+- ✅ 注册系统服务（开机自启）
+- ✅ 开启 Always Use HTTPS
 
-### 第三步：验证
+整个过程约 3~5 分钟，你只需要等待即可。
 
-- 🌐 浏览器访问 `https://你的子域名.你的域名.com` → 看到 Nginx 欢迎页
-- 🔒 自动跳转 HTTPS，地址栏显示安全锁
+### 🔰 第四步：验证
+
+- 🌐 浏览器访问 `https://你的域名` → 看到 Nginx 欢迎页
+- 🔒 网址前有安全锁（HTTPS 自动生效）
 - 📁 上传网页到 `/var/www/html/`，即刻生效
 
 ## 📖 完整文档
