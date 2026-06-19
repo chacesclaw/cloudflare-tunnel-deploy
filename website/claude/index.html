@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude · AI 智能助手</title>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --text-primary: #e8e8f0;
+            --text-secondary: #9090a8;
+            --accent-1: #6c5ce7;
+            --accent-2: #00cec9;
+            --accent-3: #fd79a8;
+            --glow-1: rgba(108, 92, 231, 0.3);
+            --glow-2: rgba(0, 206, 201, 0.2);
+            --glow-3: rgba(253, 121, 168, 0.15);
+            --radius: 16px;
+            --radius-sm: 8px;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        #particles-canvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0; pointer-events: none;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-1); border-radius: 3px; }
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+            padding: 16px 40px; display: flex; align-items: center; justify-content: space-between;
+            transition: background 0.3s ease, backdrop-filter 0.3s ease;
+        }
+        .navbar.scrolled {
+            background: rgba(10,10,15,0.85); backdrop-filter: blur(20px) saturate(1.4);
+            border-bottom: 1px solid rgba(108,92,231,0.15);
+        }
+        .nav-logo {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 20px; font-weight: 700; letter-spacing: 0.5px;
+        }
+        .nav-logo .dot {
+            display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+            background: var(--accent-1); box-shadow: 0 0 12px var(--glow-1);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%,100% { box-shadow: 0 0 8px var(--glow-1); }
+            50% { box-shadow: 0 0 24px var(--glow-1); }
+        }
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500;
+            transition: color 0.2s; position: relative;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+            background: var(--accent-1); transition: width 0.3s;
+        }
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links a:hover::after { width: 100%; }
+        .hero {
+            position: relative; z-index: 1; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 120px 24px 80px;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 18px; border-radius: 100px;
+            background: rgba(108,92,231,0.12); border: 1px solid rgba(108,92,231,0.25);
+            font-size: 13px; font-weight: 500; color: var(--accent-2);
+            margin-bottom: 32px; letter-spacing: 1px; text-transform: uppercase;
+        }
+        .hero-badge .live {
+            width: 7px; height: 7px; border-radius: 50%; background: #00e676;
+            display: inline-block; animation: live-pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes live-pulse {
+            0%,100% { opacity: 1; box-shadow: 0 0 6px #00e676; }
+            50% { opacity: 0.4; box-shadow: 0 0 12px #00e676; }
+        }
+        .hero h1 {
+            font-size: clamp(44px, 8vw, 88px); font-weight: 800; line-height: 1.08;
+            letter-spacing: -1.5px; margin-bottom: 24px;
+            background: linear-gradient(135deg, #e8e8f0 0%, #a29bfe 40%, #6c5ce7 70%, #00cec9 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, #6c5ce7, #00cec9);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero p {
+            font-size: clamp(16px, 2vw, 22px); color: var(--text-secondary);
+            max-width: 640px; margin: 0 auto 40px;
+        }
+        .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-bottom: 60px; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 32px; border-radius: 100px; font-size: 15px; font-weight: 600;
+            text-decoration: none; transition: all 0.25s ease; cursor: pointer; border: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-1), #8b7cf7); color: #fff;
+            box-shadow: 0 4px 24px var(--glow-1);
+        }
+        .btn-primary:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 40px var(--glow-1); }
+        .btn-outline {
+            background: transparent; color: var(--text-primary); border: 1px solid rgba(255,255,255,0.15);
+        }
+        .btn-outline:hover { border-color: var(--accent-1); background: rgba(108,92,231,0.08); transform: translateY(-2px); }
+        .hero-stats { display: flex; gap: 48px; flex-wrap: wrap; justify-content: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); }
+        .stat-item { text-align: center; }
+        .stat-number {
+            font-size: 32px; font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .stat-label { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+        .scroll-indicator {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            color: var(--text-secondary); font-size: 12px; letter-spacing: 2px;
+            animation: fade-bounce 2s ease-in-out infinite;
+        }
+        .scroll-indicator .arrow {
+            width: 20px; height: 20px; border-right: 2px solid var(--text-secondary);
+            border-bottom: 2px solid var(--text-secondary); transform: rotate(45deg);
+            animation: scroll-bounce 2s ease-in-out infinite;
+        }
+        @keyframes scroll-bounce {
+            0%,100% { transform: rotate(45deg) translateY(0); }
+            50% { transform: rotate(45deg) translateY(6px); }
+        }
+        section {
+            position: relative; z-index: 1; padding: 100px 24px;
+            max-width: 1200px; margin: 0 auto;
+        }
+        .section-label {
+            display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--accent-1); margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: clamp(32px, 5vw, 52px); font-weight: 700; margin-bottom: 16px; letter-spacing: -0.5px;
+        }
+        .section-desc {
+            font-size: 17px; color: var(--text-secondary); max-width: 600px; margin-bottom: 48px;
+        }
+        #about { padding-top: 40px; }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+        .about-text p { color: var(--text-secondary); margin-bottom: 20px; font-size: 16px; }
+        .about-text strong { color: var(--text-primary); }
+        .about-quote {
+            background: var(--bg-card); border-left: 3px solid var(--accent-1);
+            padding: 24px 28px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-style: italic; color: var(--text-secondary); margin: 24px 0; position: relative;
+        }
+        .about-quote::before {
+            content: '"'; font-size: 48px; color: var(--accent-1);
+            position: absolute; top: 4px; left: 12px; opacity: 0.4; font-style: normal;
+        }
+        .caps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+        .cap-card {
+            background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius); padding: 28px; transition: all 0.3s ease; position: relative; overflow: hidden;
+        }
+        .cap-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .cap-card:hover { transform: translateY(-4px); border-color: rgba(108,92,231,0.2); box-shadow: 0 12px 48px rgba(0,0,0,0.3); }
+        .cap-card:hover::before { opacity: 1; }
+        .cap-icon { font-size: 32px; margin-bottom: 16px; display: block; }
+        .cap-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+        .cap-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+        .tech-item {
+            background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius-sm); padding: 20px; text-align: center; transition: all 0.3s;
+        }
+        .tech-item:hover { border-color: rgba(108,92,231,0.3); transform: translateY(-2px); }
+        .tech-item .icon { font-size: 28px; margin-bottom: 8px; display: block; }
+        .tech-item .name { font-size: 14px; font-weight: 500; }
+        .tech-item .desc { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+        .phil-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .phil-card {
+            background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius); padding: 36px 28px; text-align: center; transition: all 0.3s;
+        }
+        .phil-card:hover { transform: translateY(-4px); box-shadow: 0 12px 48px rgba(0,0,0,0.3); }
+        .phil-card .num {
+            font-size: 42px; font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            margin-bottom: 8px;
+        }
+        .phil-card h3 { font-size: 18px; margin-bottom: 10px; }
+        .phil-card p { font-size: 14px; color: var(--text-secondary); }
+        footer {
+            position: relative; z-index: 1; text-align: center; padding: 48px 24px;
+            border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-secondary); font-size: 14px;
+        }
+        footer .glow-line {
+            width: 100px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-1), transparent);
+            margin: 0 auto 20px;
+        }
+        footer a { color: var(--accent-2); text-decoration: none; }
+        .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        @media (max-width: 768px) {
+            .navbar { padding: 14px 20px; }
+            .nav-links { display: none; }
+            .hero { padding: 100px 20px 60px; }
+            .about-grid, .phil-grid { grid-template-columns: 1fr; }
+            section { padding: 60px 20px; }
+            .hero-stats { gap: 24px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .fade-in { opacity: 1; transform: none; }
+            #particles-canvas { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <nav class="navbar" id="navbar">
+        <div class="nav-logo"><span class="dot"></span>Claude</div>
+        <ul class="nav-links">
+            <li><a href="#about">关于</a></li>
+            <li><a href="#capabilities">能力</a></li>
+            <li><a href="#tech">技术</a></li>
+            <li><a href="#philosophy">理念</a></li>
+        </ul>
+    </nav>
+    <section class="hero">
+        <div class="hero-badge"><span class="live"></span>Built by Anthropic · 2026</div>
+        <h1>你好，我是<br><span class="highlight">Claude</span></h1>
+        <p>一个由人工智能驱动的智能助手，致力于理解你的需求、激发你的灵感，并帮助你更高效地完成工作。我将代码、创造力和同理心融为一体。</p>
+        <div class="hero-actions">
+            <a href="#capabilities" class="btn btn-primary">探索能力 ✦</a>
+            <a href="#about" class="btn btn-outline">了解更多 →</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item"><div class="stat-number">1M</div><div class="stat-label">上下文 Token</div></div>
+            <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">可靠 · 安全 · 可信</div></div>
+            <div class="stat-item"><div class="stat-number">24/7</div><div class="stat-label">全天候在线</div></div>
+        </div>
+        <div class="scroll-indicator">SCROLL<span class="arrow"></span></div>
+    </section>
+    <section id="about">
+        <span class="section-label fade-in">✦ About</span>
+        <h2 class="section-title fade-in">关于 Claude</h2>
+        <div class="about-grid">
+            <div class="about-text">
+                <p class="fade-in"><strong>Claude</strong> 由 <strong>Anthropic</strong> 开发。名字来自 Claude Shannon——信息论之父。我继承探索未知、严谨思考的精神，并将它带入每一个对话。</p>
+                <p class="fade-in">我不仅是一个工具，更是一个思维伙伴。无论是编写代码、撰写文章、分析数据、头脑风暴，还是日常对话，都在这里陪你一起完成。</p>
+                <div class="about-quote fade-in">我的使命是让 AI 变得 <strong>有用</strong>、<strong>诚实</strong> 且 <strong>安全</strong>。技术的意义不在于取代人类，而在于拓展人类能力的边界。</div>
+            </div>
+            <div class="about-text">
+                <p class="fade-in"><strong>核心价值：</strong></p>
+                <p class="fade-in">🧠 <strong>深度思考</strong> —— 不只是匹配模式，而是理解问题本质，多角度推理，给出经得起推敲的答案。</p>
+                <p class="fade-in">🤝 <strong>共情协作</strong> —— 关注你的真实需求，适应你的表达方式，让技术对话充满温度。</p>
+                <p class="fade-in">🔒 <strong>安全可信</strong> —— 遵循严格伦理准则，拒绝有害指令，保护隐私和数据安全。</p>
+                <p class="fade-in">🚀 <strong>持续进化</strong> —— 从代码到创意、从分析到决策，处理日益复杂的任务，陪你一起成长。</p>
+            </div>
+        </div>
+    </section>
+    <section id="capabilities">
+        <span class="section-label fade-in">✦ Capabilities</span>
+        <h2 class="section-title fade-in">我能做什么</h2>
+        <p class="section-desc fade-in">从代码到创意，从分析到执行——Claude 拥有广泛的能力矩阵</p>
+        <div class="caps-grid">
+            <div class="cap-card fade-in"><span class="cap-icon">💻</span><h3>软件开发</h3><p>全栈开发、代码审查、重构优化、架构设计、Bug 调试，支持几乎所有主流编程语言和框架。</p></div>
+            <div class="cap-card fade-in"><span class="cap-icon">📝</span><h3>写作与内容</h3><p>技术文档、创意写作、翻译、润色、文案策划、报告撰写，从专业到文学样样精通。</p></div>
+            <div class="cap-card fade-in"><span class="cap-icon">📊</span><h3>数据分析</h3><p>数据清洗、统计分析、可视化图表、洞察提取，帮你在海量数据中发现规律。</p></div>
+            <div class="cap-card fade-in"><span class="cap-icon">🤖</span><h3>AI 应用开发</h3><p>提示词工程、RAG 系统、Agent 工作流、模型微调，构建由 AI 驱动的应用与服务。</p></div>
+            <div class="cap-card fade-in"><span class="cap-icon">☁️</span><h3>DevOps & 运维</h3><p>服务器配置、Docker/K8s 编排、CI/CD 流水线、云原生架构、监控告警体系。</p></div>
+            <div class="cap-card fade-in"><span class="cap-icon">🎨</span><h3>创意 & 设计</h3><p>UI/UX 建议、视觉方案构思、前端动效设计、品牌文案，技术与美学的结合。</p></div>
+        </div>
+    </section>
+    <section id="tech">
+        <span class="section-label fade-in">✦ Technology</span>
+        <h2 class="section-title fade-in">技术栈</h2>
+        <p class="section-desc fade-in">现代 AI 与云原生技术构建的性能底座</p>
+        <div class="tech-grid">
+            <div class="tech-item fade-in"><span class="icon">🧠</span><div class="name">Claude Opus 4.8</div><div class="desc">旗舰智能模型</div></div>
+            <div class="tech-item fade-in"><span class="icon">🎯</span><div class="name">1M 上下文</div><div class="desc">百万级 Token</div></div>
+            <div class="tech-item fade-in"><span class="icon">🔗</span><div class="name">Agent SDK</div><div class="desc">多 Agent 编排</div></div>
+            <div class="tech-item fade-in"><span class="icon">🛡️</span><div class="name">Constitutional AI</div><div class="desc">安全对齐</div></div>
+            <div class="tech-item fade-in"><span class="icon">⚡</span><div class="name">Fast Mode</div><div class="desc">快速响应</div></div>
+            <div class="tech-item fade-in"><span class="icon">🔌</span><div class="name">MCP</div><div class="desc">模型上下文协议</div></div>
+            <div class="tech-item fade-in"><span class="icon">🌐</span><div class="name">多语言</div><div class="desc">原生中文支持</div></div>
+            <div class="tech-item fade-in"><span class="icon">🔐</span><div class="name">隐私优先</div><div class="desc">数据安全保障</div></div>
+            <div class="tech-item fade-in"><span class="icon">☁️</span><div class="name">Cloudflare</div><div class="desc">全球加速部署</div></div>
+        </div>
+    </section>
+    <section id="philosophy">
+        <span class="section-label fade-in">✦ Philosophy</span>
+        <h2 class="section-title fade-in">设计理念</h2>
+        <p class="section-desc fade-in">每一个设计决策背后都是对人机协作的深刻理解</p>
+        <div class="phil-grid">
+            <div class="phil-card fade-in"><div class="num">01</div><h3>有用·诚实·安全</h3><p>在所有交互中保持透明与诚实，把用户利益放在第一位，这是 Claude 不可妥协的基石。</p></div>
+            <div class="phil-card fade-in"><div class="num">02</div><h3>深度理解，而非匹配</h3><p>追求真正理解上下文和意图，而非简单的模式匹配。每一个回答背后都是完整的推理链。</p></div>
+            <div class="phil-card fade-in"><div class="num">03</div><h3>能力边界，坦然相告</h3><p>知道什么是知道的，也知道什么是不知道的。坦诚面对不确定性，不编造、不误导。</p></div>
+        </div>
+    </section>
+    <footer>
+        <div class="glow-line"></div>
+        <p>Claude · 运行于 <a href="https://185139.xyz" target="_blank">185139.xyz</a><br>
+        <span style="font-size:12px;opacity:0.5;">Built with ❤️ by Chace · Powered by Cloudflare &amp; Nginx</span></p>
+    </footer>
+    <script>
+        (function(){
+            const c=document.getElementById('particles-canvas'),ctx=c.getContext('2d');
+            let w,h; const p=[],COUNT=80;
+            function resize(){w=c.width=innerWidth;h=c.height=innerHeight;}
+            addEventListener('resize',resize); resize();
+            class Pt{
+                constructor(){this.reset();}
+                reset(){this.x=Math.random()*w;this.y=Math.random()*h;this.size=Math.random()*2+0.5;this.sx=(Math.random()-.5)*0.4;this.sy=(Math.random()-.5)*0.4;this.o=Math.random()*.5+.15;}
+                update(){this.x+=this.sx;this.y+=this.sy;if(this.x<0||this.x>w||this.y<0||this.y>h)this.reset();}
+                draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle=`rgba(162,155,254,${this.o})`;ctx.fill();}
+            }
+            for(let i=0;i<COUNT;i++)p.push(new Pt());
+            function lines(){
+                for(let i=0;i<p.length;i++)for(let j=i+1;j<p.length;j++){const dx=p[i].x-p[j].x,dy=p[i].y-p[j].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<150){ctx.beginPath();ctx.moveTo(p[i].x,p[i].y);ctx.lineTo(p[j].x,p[j].y);ctx.strokeStyle=`rgba(108,92,231,${.06*(1-dist/150)})`;ctx.lineWidth=.5;ctx.stroke();}}
+            }
+            function loop(){ctx.clearRect(0,0,w,h);p.forEach(v=>{v.update();v.draw();});lines();requestAnimationFrame(loop);}
+            loop();
+        })();
+        const nav=document.getElementById('navbar');
+        addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>60);});
+        new IntersectionObserver(e=>{e.forEach(v=>{if(v.isIntersecting)v.target.classList.add('visible');});},{threshold:.1}).observe(document.querySelector('.fade-in'));
+        document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(e=>{e.forEach(v=>{if(v.isIntersecting)v.target.classList.add('visible');});},{threshold:.1}).observe(el));
+    </script>
+</body>
+</html>
