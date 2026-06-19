@@ -36,8 +36,10 @@
 |------|---------|
 | 🏠 **没有公网 IPv4** | Cloudflare Tunnel 建立加密隧道，无需公网 IP |
 | 💸 **不想买云服务器** | 用自己的电脑/虚拟机当服务器，零成本 |
-| 🌐 **有域名但不会配置** | 自动绑定域名 + HTTPS 证书，无需手动配置 |
-| 🔧 **不懂服务器运维** | 全自动部署脚本，一条命令搞定 |
+| 🌐 **不知道买什么域名、去哪买** | 详细指南教你花 **40~70 元买 10 年 .xyz 域名**，支持支付宝 |
+| 🔗 **买了域名不知道怎么绑定到 Cloudflare** | 给 Global API Key 即可**自动绑定**，也可以用图解指南**手动操作** |
+| 🔑 **搞不清 API Key 和 API Token** | 图文对照指南，教你一次拿对不搞混 |
+| 🔧 **不懂服务器运维** | 全自动部署脚本，一条命令搞定 Nginx、Tunnel、DNS、HTTPS |
 
 ## ✨ 功能特性
 
@@ -87,7 +89,8 @@ curl -sSL https://raw.githubusercontent.com/chacesclaw/cloudflare-tunnel-deploy/
 | 文档 | 说明 |
 |------|------|
 | [📘 一键部署教程](./docs/deploy-guide.md) | 从零到一的详细部署步骤 |
-| [🏷️ 几块钱买 .xyz 域名（Namesilo 优惠码）](./docs/buy-cheap-xyz-domain.md) | 首年约 3 元，长期持有 10 年约 360 元 |
+| [🏷️ 几块钱买 .xyz 域名（六位数字 .xyz 续费也便宜）](./docs/buy-cheap-xyz-domain.md) | 10 年 ≈ 43~70 元，续费同价，日均 1 分钱 |
+| [⚡ 域名自动绑定到 Cloudflare](./docs/domain-auto-bind.md) | 给 Global API Key 即可自动绑定，无需手动操作 |
 | [🌐 域名托管到 Cloudflare（完整图解）](./docs/domain-setup-cloudflare.md) | 第一步：把域名交给 Cloudflare 管理，手把手教学 |
 | [🔑 Global API Key 获取指南（避免搞错）](./docs/global-api-key-guide.md) | 弄清 API Key 和 API Token 的区别，一次拿对 |
 | [💻 VMware 搭建 Linux 虚拟机（Win/Mac）](./docs/vmware-vm-setup.md) | VMware 已免费！从安装到 Ubuntu 系统搭建详细教程 |
@@ -108,6 +111,7 @@ cloudflare-tunnel-deploy/
 ├── docs/                         # 详细文档
 │   ├── buy-cheap-xyz-domain.md          # 🏷️ 几块钱买.xyz域名
 │   ├── domain-setup-cloudflare.md    # 🌐 域名托管到Cloudflare（完整图解）
+│   ├── domain-auto-bind.md           # ⚡ 域名自动绑定到Cloudflare（给API Key即可）
 │   ├── global-api-key-guide.md       # 🔑 Global API Key获取指南（避免搞错）
 │   ├── vmware-vm-setup.md            # 💻 VMware搭建Linux虚拟机（Win/Mac）
 │   ├── deploy-guide.md               # 📘 一键部署教程
