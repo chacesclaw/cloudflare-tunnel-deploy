@@ -212,8 +212,31 @@ cloudflare-tunnel-deploy/
 
 ## 📋 更新日志
 
-### v1.0.0 (2026-06-19)
-- 🎉 首次发布
+> 完整版本历史请查看 [Releases 页面](https://github.com/chacesclaw/cloudflare-tunnel-deploy/releases)
+
+### 🗺️ v1.4.0 — README 全流程重设计
+- 新增「业务流程一览」ASCII 流程图，清晰呈现从准备到完成的完整链路
+- 快速开始改为 4 步引导（查漏补缺 → 给AI信息 → 自动配置 → 验证）
+- 理念从"前置条件+curl命令"升级为"准备三样东西→交给AI→坐等完成"
+
+### 📘 v1.3.0 — 域名价格更新 + 自动绑定文档
+- 域名价格更新为六位数字 .xyz（续费也便宜）
+- 新增「域名自动绑定到 Cloudflare」文档
+- 痛点表格扩展
+
+### 🏷️ v1.2.1 — .xyz 域名指南更新
+- 修正为六位数字 .xyz（续费 $0.60/年≈4.5元）
+- 新增阿里云（7元/年）和 Spaceship（$0.60/年）方案
+
+### 🏷️ v1.2.0 — 新增 .xyz 域名购买指南
+- 新增「几块钱买 .xyz 域名」完整指南
+
+### 📚 v1.1.0 — 新增三份新手友好文档
+- 域名托管到 Cloudflare 图解
+- Global API Key 获取指南
+- VMware 搭建 Linux 虚拟机教程
+
+### 🎉 v1.0.0 — 首次发布
 - ⚡ 一键部署脚本
 - 🔐 Cloudflare Tunnel 自动创建
 - 📝 Nginx 站点自动配置
